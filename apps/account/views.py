@@ -1,7 +1,7 @@
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.db.models import Q
+from django.db.models import Q, datetime
 from django.shortcuts import render, redirect
 from django.template import loader
 from apps.account.models import User
@@ -75,6 +75,12 @@ def register(request):
                         # 第一个操作将用户信息保存到session中
                         # 第二个操作将用户信息绑定到request对象
                         # request.user
+                        # 验证的有效期
+                        # 设计有效期  表设计    tooken   过期时间datetime.timedelta(minutes=30)
+                        # 设计有效期  redis来做
+                        # 令牌tocken=1
+                        # datetime.timedelta(minutes=30)
+                        # cache.set(tocken,user.id,timeout=10*60)
                         active_url = f'http://127.0.0.1:8000/account/active/?uid={user.id}'
                         content = loader.render_to_string('mail.html',
                                                           request=request,
